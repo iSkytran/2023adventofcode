@@ -32,10 +32,7 @@ func parseSliceToInt(strSlice []string) []int {
 
 func copySliceOfGames(games []*scratchoffGame) []*scratchoffGame {
 	copy := make([]*scratchoffGame, 0)
-	for _, game := range games {
-		copy = append(copy, game)
-	}
-	return copy
+	return append(copy, games...)
 }
 
 type scratchoffGame struct {
