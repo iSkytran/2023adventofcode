@@ -36,10 +36,10 @@ func check(e error) {
 	}
 }
 
-func openFile(path string) *bufio.Scanner {
+func openFile(path string) (*bufio.Scanner, *os.File) {
 	file, err := os.Open(path)
 	check(err)
-	return bufio.NewScanner(file)
+	return bufio.NewScanner(file), file
 }
 
 func reverse(str string) string {
@@ -52,7 +52,8 @@ func reverse(str string) string {
 }
 
 func part1(path string) {
-	scanner := openFile(path)
+	scanner, file := openFile(path)
+	defer file.Close()
 
 	// Compile regex.
 	regex := regexp.MustCompile("[0-9]")
@@ -79,7 +80,8 @@ func part1(path string) {
 
 
 func part2(path string) {
-	scanner := openFile(path)
+	scanner, file := openFile(path)
+	defer file.Close()
 
 	// Compile regex.
 	forwardRegex := regexp.MustCompile("zero|one|two|three|four|five|six|seven|eight|nine|[0-9]")

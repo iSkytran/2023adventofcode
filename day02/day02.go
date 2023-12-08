@@ -17,6 +17,12 @@ func check(e error) {
 	}
 }
 
+func openFile(path string) (*bufio.Scanner, *os.File) {
+	file, err := os.Open(path)
+	check(err)
+	return bufio.NewScanner(file), file
+}
+
 type game struct {
 	id     int
 	rounds []*round
@@ -108,10 +114,8 @@ func (g *round) addColor(color string, count int) {
 }
 
 func part1(path string) {
-	// Open file.
-	file, err := os.Open(path)
-	check(err)
-	scanner := bufio.NewScanner(file)
+	scanner, file := openFile(path)
+	defer file.Close()
 
 	// Parse input.
 	sum := 0
@@ -129,10 +133,8 @@ func part1(path string) {
 }
 
 func part2(path string) {
-	// Open file.
-	file, err := os.Open(path)
-	check(err)
-	scanner := bufio.NewScanner(file)
+	scanner, file := openFile(path)
+	defer file.Close()
 
 	// Parse input.
 	sum := 0

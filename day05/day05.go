@@ -15,10 +15,10 @@ func check(e error) {
 	}
 }
 
-func openFile(path string) *bufio.Scanner {
+func openFile(path string) (*bufio.Scanner, *os.File) {
 	file, err := os.Open(path)
 	check(err)
-	return bufio.NewScanner(file)
+	return bufio.NewScanner(file), file
 }
 
 type almanac struct {
@@ -93,11 +93,12 @@ func parseRangeOfSeeds(line string) []*seedRange {
 }
 
 func generateAlmanac(path string, seedParseFunc func(string) []*seedRange) *almanac {
-	scanner := openFile(path)
-	a := new(almanac)
+	scanner, file := openFile(path)
+	defer file.Close()
 
 	// Parse each line.
 	var curLookupTbl *rangeMaps
+	a := new(almanac)
 	for scanner.Scan() {
 		line := scanner.Text()
 

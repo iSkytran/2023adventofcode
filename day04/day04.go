@@ -15,10 +15,10 @@ func check(e error) {
 	}
 }
 
-func openFile(path string) *bufio.Scanner {
+func openFile(path string) (*bufio.Scanner, *os.File) {
 	file, err := os.Open(path)
 	check(err)
-	return bufio.NewScanner(file)
+	return bufio.NewScanner(file), file
 }
 
 func parseSliceToInt(strSlice []string) []int {
@@ -81,7 +81,8 @@ func (game *scratchoffGame) computePoints() int {
 }
 
 func part1(path string) {
-	scanner := openFile(path)
+	scanner, file := openFile(path)
+	defer file.Close()
 
 	games := make([]*scratchoffGame, 0)
 	for scanner.Scan() {
@@ -99,7 +100,8 @@ func part1(path string) {
 }
 
 func part2(path string) {
-	scanner := openFile(path)
+	scanner, file := openFile(path)
+	defer file.Close()
 
 	games := make([]*scratchoffGame, 0)
 	for scanner.Scan() {

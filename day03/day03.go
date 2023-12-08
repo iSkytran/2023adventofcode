@@ -16,10 +16,10 @@ func check(e error) {
 	}
 }
 
-func openFile(path string) *bufio.Scanner {
+func openFile(path string) (*bufio.Scanner, *os.File) {
 	file, err := os.Open(path)
 	check(err)
-	return bufio.NewScanner(file)
+	return bufio.NewScanner(file), file
 }
 
 type schematic struct {
@@ -147,7 +147,8 @@ func (s *schematic) gearRatio(g *gear) int {
 }
 
 func generateSchematic(path string) *schematic {
-	scanner := openFile(path)
+	scanner, file := openFile(path)
+	defer file.Close()
 
 	// Iterate per line.
 	diagram := newSchematic()
