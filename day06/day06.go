@@ -9,16 +9,6 @@ import (
 	"github.com/iSkytran/2023adventofcode/utilities"
 )
 
-func stringsToInts(s []string) []int {
-	// Convert list of strings to a list of integers.
-	converted := make([]int, 0)
-	for _, str := range s {
-		val, _ := strconv.Atoi(str)
-		converted = append(converted, val)
-	}
-	return converted
-}
-
 type boatRace struct {
 	time           int
 	recordDistance int
@@ -37,8 +27,8 @@ func makeBoatRaces(path string) []*boatRace {
 	distanceLine := scanner.Text()[9:]
 
 	// Parse numbers.
-	times := stringsToInts(strings.Fields(timeLine))
-	distances := stringsToInts(strings.Fields(distanceLine))
+	times := utilities.StringsToInts(strings.Fields(timeLine))
+	distances := utilities.StringsToInts(strings.Fields(distanceLine))
 
 	var boatRaces []*boatRace
 	for i := 0; i < len(times); i++ {

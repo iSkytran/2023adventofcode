@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"math"
 	"os"
-	"strconv"
 	"strings"
 
 	"github.com/iSkytran/2023adventofcode/utilities"
@@ -34,20 +33,10 @@ type rangeMap struct {
 	destinationOffset int
 }
 
-func stringsToInts(s []string) []int {
-	// Convert list of strings to a list of integers.
-	converted := make([]int, 0)
-	for _, str := range s {
-		val, _ := strconv.Atoi(str)
-		converted = append(converted, val)
-	}
-	return converted
-}
-
 func parseSeeds(line string) []*seedRange {
 	// Parse strings to a list.
 	strSlice := strings.Fields(line[7:])
-	values := stringsToInts(strSlice)
+	values := utilities.StringsToInts(strSlice)
 
 	var seeds []*seedRange
 	for _, val := range values {
@@ -64,7 +53,7 @@ func parseSeeds(line string) []*seedRange {
 func parseRangeOfSeeds(line string) []*seedRange {
 	// Parse strings to a list.
 	s := strings.Fields(line[7:])
-	values := stringsToInts(s)
+	values := utilities.StringsToInts(s)
 
 	// Go through the whole list.
 	var seeds []*seedRange
@@ -116,7 +105,7 @@ func generateAlmanac(path string, seedParseFunc func(string) []*seedRange) *alma
 		default:
 			// Add range to lookup table.
 			values := strings.Fields(line)
-			ints := stringsToInts(values)
+			ints := utilities.StringsToInts(values)
 			newMap := newRangeMap(ints)
 			*curLookupTbl = append(*curLookupTbl, newMap)
 		}

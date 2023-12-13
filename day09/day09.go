@@ -3,25 +3,14 @@ package main
 import (
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 
 	"github.com/iSkytran/2023adventofcode/utilities"
 )
 
-func stringsToInts(s []string) []int {
-	// Convert list of strings to a list of integers.
-	converted := make([]int, 0)
-	for _, str := range s {
-		val, _ := strconv.Atoi(str)
-		converted = append(converted, val)
-	}
-	return converted
-}
-
 func parseHistory(line string) []int {
 	tokens := strings.Fields(line)
-	return stringsToInts(tokens)
+	return utilities.StringsToInts(tokens)
 }
 
 func interpolateNext(history []int) int {

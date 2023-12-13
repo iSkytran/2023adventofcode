@@ -15,29 +15,6 @@ const (
 	east
 )
 
-type set[K comparable] struct {
-	items map[K]struct{}
-}
-
-func newSet[K comparable]() *set[K] {
-	s := new(set[K])
-	s.items = make(map[K]struct{})
-	return s
-}
-
-func (s *set[K]) add(element K) {
-	s.items[element] = struct{}{}
-}
-
-func (s *set[K]) contains(element K) bool {
-	_, ok := s.items[element]
-	return ok
-}
-
-func (s *set[K]) size() int {
-	return len(s.items)
-}
-
 type coordinates struct {
 	row int
 	col int
@@ -46,7 +23,7 @@ type coordinates struct {
 type pipeMaze struct {
 	startCoord *coordinates
 	diagram    [][]rune
-	loop       *set[coordinates]
+	loop       *utilities.Set[coordinates]
 }
 
 func newMaze() *pipeMaze {
@@ -55,7 +32,7 @@ func newMaze() *pipeMaze {
 	return maze
 }
 
-func (maze *pipeMaze) adjacentToStart() ([]coordinates, *set[int]) {
+func (maze *pipeMaze) adjacentToStart() ([]coordinates, *utilities.Set[int]) {
 	// Find direction to proceed in from start.
 	start := maze.startCoord
 	valid := map[int]coordinates{
@@ -86,23 +63,23 @@ func (maze *pipeMaze) adjacentToStart() ([]coordinates, *set[int]) {
 	}
 
 	adjacentCoords := make([]coordinates, 0)
-	adjacentDirections := newSet[int]()
+	adjacentDirections := utilities.NewSet[int]()
 	for direction, coords := range valid {
 		// Check if next pipe is connected.
 		pipe := string(maze.diagram[coords.row][coords.col])
 		switch {
 		case direction == north && strings.Contains("|7F", pipe):
 			adjacentCoords = append(adjacentCoords, coords)
-			adjacentDirections.add(direction)
+			adjacentDirections.Add(direction)
 		case direction == south && strings.Contains("|JL", pipe):
 			adjacentCoords = append(adjacentCoords, coords)
-			adjacentDirections.add(direction)
+			adjacentDirections.Add(direction)
 		case direction == west && strings.Contains("-FL", pipe):
 			adjacentCoords = append(adjacentCoords, coords)
-			adjacentDirections.add(direction)
+			adjacentDirections.Add(direction)
 		case direction == east && strings.Contains("-7J", pipe):
 			adjacentCoords = append(adjacentCoords, coords)
-			adjacentDirections.add(direction)
+			adjacentDirections.Add(direction)
 		}
 	}
 
@@ -112,7 +89,7 @@ func (maze *pipeMaze) adjacentToStart() ([]coordinates, *set[int]) {
 
 func (maze *pipeMaze) computeLoop() {
 	// Keep track of loop coordinates.
-	maze.loop = newSet[coordinates]()
+	maze.loop = utilities.NewSet[coordinates]()
 
 	// Find the coordinates of the direction to go in.
 	adjacentCoords, _ := maze.adjacentToStart()
@@ -129,7 +106,7 @@ func (maze *pipeMaze) computeLoop() {
 		valid[east] = coordinates{current.row, current.col + 1}
 
 		// Add current coordinates to visited.
-		maze.loop.add(current)
+		maze.loop.Add(current)
 
 		// Remove invalid directions.
 		switch currentPipe {
@@ -164,7 +141,7 @@ func (maze *pipeMaze) computeLoop() {
 				continue
 			}
 
-			if !maze.loop.contains(coord) {
+			if !maze.loop.Contains(coord) {
 				// Location not visited yet.
 				current = coord
 				break
@@ -179,7 +156,7 @@ func (maze *pipeMaze) computeEnclosed() [][]rune {
 	for rowNum, row := range maze.diagram {
 		for colNum := range row {
 			current := coordinates{rowNum, colNum}
-			if !maze.loop.contains(current) {
+			if !maze.loop.Contains(current) {
 				row[colNum] = '.'
 			}
 		}
@@ -189,17 +166,17 @@ func (maze *pipeMaze) computeEnclosed() [][]rune {
 	// Replace start with pipe.
 	_, adjacentDirections := maze.adjacentToStart()
 	switch {
-	case adjacentDirections.contains(north) && adjacentDirections.contains(south):
+	case adjacentDirections.Contains(north) && adjacentDirections.Contains(south):
 		diagram[maze.startCoord.row][maze.startCoord.col] = '|'
-	case adjacentDirections.contains(west) && adjacentDirections.contains(east):
+	case adjacentDirections.Contains(west) && adjacentDirections.Contains(east):
 		diagram[maze.startCoord.row][maze.startCoord.col] = '-'
-	case adjacentDirections.contains(north) && adjacentDirections.contains(west):
+	case adjacentDirections.Contains(north) && adjacentDirections.Contains(west):
 		diagram[maze.startCoord.row][maze.startCoord.col] = 'J'
-	case adjacentDirections.contains(north) && adjacentDirections.contains(east):
+	case adjacentDirections.Contains(north) && adjacentDirections.Contains(east):
 		diagram[maze.startCoord.row][maze.startCoord.col] = 'L'
-	case adjacentDirections.contains(west) && adjacentDirections.contains(south):
+	case adjacentDirections.Contains(west) && adjacentDirections.Contains(south):
 		diagram[maze.startCoord.row][maze.startCoord.col] = '7'
-	case adjacentDirections.contains(east) && adjacentDirections.contains(south):
+	case adjacentDirections.Contains(east) && adjacentDirections.Contains(south):
 		diagram[maze.startCoord.row][maze.startCoord.col] = 'F'
 	}
 
@@ -286,7 +263,7 @@ func parseMaze(path string) *pipeMaze {
 }
 
 func (maze *pipeMaze) stepsToEnd() int {
-	return maze.loop.size() / 2
+	return maze.loop.Size() / 2
 }
 
 func part1(path string) {
