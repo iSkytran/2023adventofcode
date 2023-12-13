@@ -1,23 +1,12 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/iSkytran/2023adventofcode/utilities"
 )
-
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
-func openFile(path string) (*bufio.Scanner, *os.File) {
-	file, err := os.Open(path)
-	check(err)
-	return bufio.NewScanner(file), file
-}
 
 const (
 	north = iota
@@ -273,7 +262,7 @@ func (maze *pipeMaze) computeEnclosed() [][]rune {
 }
 
 func parseMaze(path string) *pipeMaze {
-	scanner, file := openFile(path)
+	scanner, file := utilities.OpenFile(path)
 	defer file.Close()
 
 	maze := newMaze()

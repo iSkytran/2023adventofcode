@@ -1,25 +1,14 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"math"
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/iSkytran/2023adventofcode/utilities"
 )
-
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
-func openFile(path string) (*bufio.Scanner, *os.File) {
-	file, err := os.Open(path)
-	check(err)
-	return bufio.NewScanner(file), file
-}
 
 func parseSliceToInt(strSlice []string) []int {
 	intSlice := make([]int, 0)
@@ -39,9 +28,8 @@ type scratchoffGame struct {
 	id          int
 	winningNums []int
 	actualNums  []int
-	numMatches	int
+	numMatches  int
 }
-
 
 func newScratchoffGame(input string) *scratchoffGame {
 	// Parse line into a game struct.
@@ -77,11 +65,11 @@ func (game *scratchoffGame) computePoints() int {
 	if game.numMatches == 0 {
 		return 0
 	}
-	return int(math.Pow(2, float64(game.numMatches - 1)))
+	return int(math.Pow(2, float64(game.numMatches-1)))
 }
 
 func part1(path string) {
-	scanner, file := openFile(path)
+	scanner, file := utilities.OpenFile(path)
 	defer file.Close()
 
 	games := make([]*scratchoffGame, 0)
@@ -100,7 +88,7 @@ func part1(path string) {
 }
 
 func part2(path string) {
-	scanner, file := openFile(path)
+	scanner, file := utilities.OpenFile(path)
 	defer file.Close()
 
 	games := make([]*scratchoffGame, 0)

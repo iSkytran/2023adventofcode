@@ -1,26 +1,15 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 	"regexp"
 	"strconv"
+
+	"github.com/iSkytran/2023adventofcode/utilities"
 )
 
 var regex = regexp.MustCompile("[0-9]+")
-
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
-func openFile(path string) (*bufio.Scanner, *os.File) {
-	file, err := os.Open(path)
-	check(err)
-	return bufio.NewScanner(file), file
-}
 
 type schematic struct {
 	gridNumbers []*gridNumber
@@ -147,7 +136,7 @@ func (s *schematic) gearRatio(g *gear) int {
 }
 
 func generateSchematic(path string) *schematic {
-	scanner, file := openFile(path)
+	scanner, file := utilities.OpenFile(path)
 	defer file.Close()
 
 	// Iterate per line.

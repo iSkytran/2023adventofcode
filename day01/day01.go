@@ -1,10 +1,11 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 	"regexp"
+
+	"github.com/iSkytran/2023adventofcode/utilities"
 )
 
 var lookupTable = map[string]int{
@@ -30,18 +31,6 @@ var lookupTable = map[string]int{
 	"9":     9,
 }
 
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
-func openFile(path string) (*bufio.Scanner, *os.File) {
-	file, err := os.Open(path)
-	check(err)
-	return bufio.NewScanner(file), file
-}
-
 func reverse(str string) string {
 	slice := []rune(str)
 	reversed := make([]rune, len(slice))
@@ -52,7 +41,7 @@ func reverse(str string) string {
 }
 
 func part1(path string) {
-	scanner, file := openFile(path)
+	scanner, file := utilities.OpenFile(path)
 	defer file.Close()
 
 	// Compile regex.
@@ -78,9 +67,8 @@ func part1(path string) {
 	fmt.Printf("Total: %d\n", sum)
 }
 
-
 func part2(path string) {
-	scanner, file := openFile(path)
+	scanner, file := utilities.OpenFile(path)
 	defer file.Close()
 
 	// Compile regex.

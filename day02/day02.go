@@ -1,27 +1,16 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/iSkytran/2023adventofcode/utilities"
 )
 
 const redMax = 12
 const greenMax = 13
 const blueMax = 14
-
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
-func openFile(path string) (*bufio.Scanner, *os.File) {
-	file, err := os.Open(path)
-	check(err)
-	return bufio.NewScanner(file), file
-}
 
 type game struct {
 	id     int
@@ -114,7 +103,7 @@ func (g *round) addColor(color string, count int) {
 }
 
 func part1(path string) {
-	scanner, file := openFile(path)
+	scanner, file := utilities.OpenFile(path)
 	defer file.Close()
 
 	// Parse input.
@@ -133,7 +122,7 @@ func part1(path string) {
 }
 
 func part2(path string) {
-	scanner, file := openFile(path)
+	scanner, file := utilities.OpenFile(path)
 	defer file.Close()
 
 	// Parse input.

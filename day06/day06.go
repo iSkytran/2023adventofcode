@@ -1,24 +1,13 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/iSkytran/2023adventofcode/utilities"
 )
-
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
-func openFile(path string) (*bufio.Scanner, *os.File) {
-	file, err := os.Open(path)
-	check(err)
-	return bufio.NewScanner(file), file
-}
 
 func stringsToInts(s []string) []int {
 	// Convert list of strings to a list of integers.
@@ -36,7 +25,7 @@ type boatRace struct {
 }
 
 func makeBoatRaces(path string) []*boatRace {
-	scanner, file := openFile(path)
+	scanner, file := utilities.OpenFile(path)
 	defer file.Close()
 
 	// Get race times.
@@ -63,7 +52,7 @@ func makeBoatRaces(path string) []*boatRace {
 }
 
 func makeBoatRace(path string) *boatRace {
-	scanner, file := openFile(path)
+	scanner, file := utilities.OpenFile(path)
 	defer file.Close()
 
 	// Get race times.

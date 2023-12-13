@@ -1,24 +1,13 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 	"regexp"
 	"strings"
+
+	"github.com/iSkytran/2023adventofcode/utilities"
 )
-
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
-func openFile(path string) (*bufio.Scanner, *os.File) {
-	file, err := os.Open(path)
-	check(err)
-	return bufio.NewScanner(file), file
-}
 
 func lcm(numSlice []int) int {
 	// Least common multiple of a list of numbers.
@@ -48,7 +37,7 @@ type networkNode struct {
 }
 
 func parseMap(path string) *navigationMap {
-	scanner, file := openFile(path)
+	scanner, file := utilities.OpenFile(path)
 	defer file.Close()
 
 	regex := regexp.MustCompile(`([A-Z0-9]+) = \(([A-Z0-9]+), ([A-Z0-9]+)\)`)

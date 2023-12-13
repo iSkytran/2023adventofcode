@@ -1,25 +1,14 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"math"
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/iSkytran/2023adventofcode/utilities"
 )
-
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
-func openFile(path string) (*bufio.Scanner, *os.File) {
-	file, err := os.Open(path)
-	check(err)
-	return bufio.NewScanner(file), file
-}
 
 type almanac struct {
 	seedRanges            []*seedRange
@@ -93,7 +82,7 @@ func parseRangeOfSeeds(line string) []*seedRange {
 }
 
 func generateAlmanac(path string, seedParseFunc func(string) []*seedRange) *almanac {
-	scanner, file := openFile(path)
+	scanner, file := utilities.OpenFile(path)
 	defer file.Close()
 
 	// Parse each line.
