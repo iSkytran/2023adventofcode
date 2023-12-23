@@ -1,6 +1,7 @@
 package utilities
 
 import (
+	"math"
 	"strconv"
 )
 
@@ -10,6 +11,21 @@ func CreateSlice[T comparable](size int, initial T) []T {
 		s = append(s, initial)
 	}
 	return s
+}
+
+func ElementHammingDistance[T comparable](s1 []T, s2 []T) int {
+	if len(s1) != len(s2) {
+		return int(math.Abs(float64(len(s1) - len(s2))))
+	}
+
+	distance := 0
+	for idx := range s1 {
+		if s1[idx] != s2[idx] {
+			distance++
+		}
+	}
+
+	return distance
 }
 
 func StringsToInts(stringSlice []string) []int {
