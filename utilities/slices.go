@@ -1,6 +1,8 @@
 package utilities
 
-import "strconv"
+import (
+	"strconv"
+)
 
 func CreateSlice[T comparable](size int, initial T) []T {
 	s := make([]T, 0)
@@ -18,4 +20,14 @@ func StringsToInts(stringSlice []string) []int {
 		intSlice = append(intSlice, val)
 	}
 	return intSlice
+}
+
+func IntsToStrings(intSlice []int) []string {
+	// Convert list of integers to a list of integers.
+	strSlice := make([]string, 0)
+	for _, val := range intSlice {
+		str := strconv.Itoa(val)
+		strSlice = append(strSlice, str)
+	}
+	return strSlice
 }
