@@ -22,3 +22,13 @@ func (s *Set[K]) Contains(element K) bool {
 func (s *Set[K]) Size() int {
 	return len(s.items)
 }
+
+func (s *Set[K]) ToSlice() []K {
+	entries := make([]K, s.Size())
+	i := 0
+	for entry := range s.items {
+		entries[i] = entry
+		i++
+	}
+	return entries
+}
