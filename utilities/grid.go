@@ -1,7 +1,10 @@
 package utilities
 
 import (
+	"bytes"
+	"encoding/gob"
 	"errors"
+	"fmt"
 )
 
 type Grid[T comparable] struct {
@@ -35,6 +38,10 @@ func (g *Grid[_]) ColSize() int {
 		return 0
 	}
 	return len(g.Data[0])
+}
+
+func (g *Grid[_]) Shape() (int, int) {
+	return g.RowSize(), g.ColSize()
 }
 
 func (g *Grid[T]) Search(item T) []Coordinates {
@@ -107,6 +114,18 @@ func (g *Grid[T]) GetRow(index int) ([]T, error) {
 	return g.Data[index], nil
 }
 
+func (g *Grid[T]) SetRow(index int, row []T) error {
+	if index < 0 || index > g.RowSize() {
+		return errors.New("row index out of bounds")
+	}
+
+	for i := 0; i < g.ColSize(); i++ {
+		g.Set(index, i, row[i])
+	}
+
+	return nil
+}
+
 func (g *Grid[T]) AppendRow(row []T) {
 	g.AddRow(g.RowSize(), row)
 }
@@ -152,6 +171,18 @@ func (g *Grid[T]) GetColumn(index int) ([]T, error) {
 	return column, nil
 }
 
+func (g *Grid[T]) SetColumn(index int, column []T) error {
+	if index < 0 || index > g.ColSize() {
+		return errors.New("column index out of bounds")
+	}
+
+	for i := 0; i < g.RowSize(); i++ {
+		g.Set(i, index, column[i])
+	}
+
+	return nil
+}
+
 func (g *Grid[T]) AppendColumn(column []T) {
 	g.AddColumn(g.ColSize(), column)
 }
@@ -167,4 +198,23 @@ func (g *Grid[T]) ColContains(index int, item T) bool {
 		}
 	}
 	return false
+}
+
+func (g *Grid[_]) PrintGrid() {
+	for i := 0; i < g.RowSize(); i++ {
+		if row, ok := any(g.Data[i]).([]rune); ok {
+			fmt.Println(string(row))
+		} else {
+			for j := 0; j < g.ColSize(); j++ {
+				fmt.Printf("%v", g.Data[i][j])
+			}
+			fmt.Printf("\n")
+		}
+	}
+}
+
+func (g *Grid[_]) Serialize() string {
+	buffer := bytes.Buffer{}
+	gob.NewEncoder(&buffer).Encode(g)
+	return buffer.String()	
 }
