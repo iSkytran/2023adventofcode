@@ -5,6 +5,7 @@ import (
 	"encoding/gob"
 	"errors"
 	"fmt"
+	"math"
 )
 
 // ******************************************* //
@@ -21,6 +22,18 @@ func (coord Coordinates) Add(otherCoord Coordinates) Coordinates {
 	return Coordinates{Row: row, Col: col}
 }
 
+func (coord Coordinates) Subtract(otherCoord Coordinates) Coordinates {
+	row := coord.Row - otherCoord.Row
+	col := coord.Col - otherCoord.Col
+	return Coordinates{Row: row, Col: col}
+}
+
+func (coord Coordinates) Abs() Coordinates {
+	coord.Row = int(math.Abs(float64(coord.Row)))
+	coord.Col = int(math.Abs(float64(coord.Col)))
+	return coord
+}
+
 func (g *Grid[T]) GetByCoord(coord Coordinates) (T, error) {
 	return g.Get(coord.Row, coord.Col)
 }
@@ -34,7 +47,7 @@ func (g *Grid[T]) CoordInGrid(coord Coordinates) bool {
 // Vector structure (origin and direction). //
 // **************************************** //
 type Vector struct {
-	Origin Coordinates
+	Origin    Coordinates
 	Direction Coordinates
 }
 
