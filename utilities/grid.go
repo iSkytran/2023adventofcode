@@ -28,6 +28,12 @@ func (coord Coordinates) Subtract(otherCoord Coordinates) Coordinates {
 	return Coordinates{Row: row, Col: col}
 }
 
+func (coord Coordinates) Scale(scalar int) Coordinates {
+	row := scalar * coord.Row
+	col := scalar * coord.Col
+	return Coordinates{Row: row, Col: col}
+}
+
 func (coord Coordinates) Abs() Coordinates {
 	coord.Row = int(math.Abs(float64(coord.Row)))
 	coord.Col = int(math.Abs(float64(coord.Col)))
@@ -36,6 +42,10 @@ func (coord Coordinates) Abs() Coordinates {
 
 func (g *Grid[T]) GetByCoord(coord Coordinates) (T, error) {
 	return g.Get(coord.Row, coord.Col)
+}
+
+func (g *Grid[T]) SetByCoord(coord Coordinates, val T) error {
+	return g.Set(coord.Row, coord.Col, val)
 }
 
 func (g *Grid[T]) CoordInGrid(coord Coordinates) bool {
